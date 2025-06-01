@@ -12,6 +12,7 @@ namespace WindowsFormsApp1
         private int octaves = 12;
         private double persistence = 1;
         private double scale = 0.01;
+        private bool isDarkTheme = false;
 
         public Form1()
         {
@@ -24,6 +25,7 @@ namespace WindowsFormsApp1
             TextBox seedTextBox = new TextBox { Location = new Point(10, Height + 10), Width = 100 };
             Button generateButton = new Button { Text = "Generate", Location = new Point(120, Height + 10) };
             PictureBox pictureBox = new PictureBox { Location = new Point(0, 0), Size = new Size(Width, Height) };
+            Button themeButton = new Button { Text = "Switch to Dark Theme", Location = new Point(300, Height + 10), Width = 150 };
 
             generateButton.Click += (sender, e) =>
             {
@@ -38,9 +40,80 @@ namespace WindowsFormsApp1
                 }
             };
 
+            themeButton.Click += (sender, e) =>
+            {
+                isDarkTheme = !isDarkTheme;
+                ApplyTheme();
+                themeButton.Text = isDarkTheme ? "Switch to Light Theme" : "Switch to Dark Theme";
+            };
+
             this.Controls.Add(seedTextBox);
             this.Controls.Add(generateButton);
             this.Controls.Add(pictureBox);
+            this.Controls.Add(themeButton);
+
+            // Apply initial theme
+            ApplyTheme();
+        }
+
+        private void ApplyTheme()
+        {
+            if (isDarkTheme)
+            {
+                // Dark theme colors
+                this.BackColor = Color.FromArgb(45, 45, 48);
+                this.ForeColor = Color.White;
+
+                foreach (Control control in this.Controls)
+                {
+                    if (control is TextBox)
+                    {
+                        control.BackColor = Color.FromArgb(37, 37, 38);
+                        control.ForeColor = Color.White;
+                    }
+                    else if (control is Button)
+                    {
+                        control.BackColor = Color.FromArgb(63, 63, 70);
+                        control.ForeColor = Color.White;
+                    }
+                    else if (control is Label)
+                    {
+                        control.ForeColor = Color.White;
+                    }
+                    else if (control is TrackBar)
+                    {
+                        control.BackColor = Color.FromArgb(63, 63, 70);
+                    }
+                }
+            }
+            else
+            {
+                // Light theme colors (default)
+                this.BackColor = SystemColors.Control;
+                this.ForeColor = SystemColors.ControlText;
+
+                foreach (Control control in this.Controls)
+                {
+                    if (control is TextBox)
+                    {
+                        control.BackColor = SystemColors.Window;
+                        control.ForeColor = SystemColors.WindowText;
+                    }
+                    else if (control is Button)
+                    {
+                        control.BackColor = SystemColors.Control;
+                        control.ForeColor = SystemColors.ControlText;
+                    }
+                    else if (control is Label)
+                    {
+                        control.ForeColor = SystemColors.ControlText;
+                    }
+                    else if (control is TrackBar)
+                    {
+                        control.BackColor = SystemColors.Control;
+                    }
+                }
+            }
         }
 
         private void InitializeSliders()
